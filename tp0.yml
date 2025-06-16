@@ -1,0 +1,24 @@
+---
+- name: tp0
+  hosts: all
+  gather_facts: False
+  remote_user: root
+  become: True
+  become_user: root
+  become_method: sudo
+
+  tasks:
+  - name: "install vim"
+    ansible.builtin.apt:
+      name: vim
+      state: present
+
+  - name: "Check /etc/passwd"
+    ansible.builtin.stat:
+      path: /etc/passwd
+
+  - name: "Print /etc/passwd content"
+    ansible.builtin.command:
+      cmd: cat /etc/passwd
+    register: passwd_content
+...
