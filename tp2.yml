@@ -1,0 +1,36 @@
+---
+- name: tp2
+  hosts: all
+  gather_facts: True
+  remote_user: root
+  become: True
+  become_user: root
+  become_method: sudo
+
+  tasks:
+  - name: "install apps"
+    ansible.builtin.apt:
+      name: "{{ item }}" 
+      state: present
+    loop:
+      - vim
+      - git
+      - curl
+      - wget
+      - python3-pip
+      - apache2
+      - mysql-server
+
+  - name: "Check if index.html exists"
+    ansible.builtin.stat:
+      path: /var/www/html/index.html
+    register: index_exist
+
+  - name: Change the index.html content 
+    ansible.builtin.copy:
+      src: /tmp/index.html
+      dest: /var/www/html/index.html
+    when: index_exist
+    notify:
+      - Restart apache
+...

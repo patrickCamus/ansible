@@ -1,0 +1,7 @@
+---
+- name: Restart apache
+  ansible.builtin.systemd_service:
+    name: apache2
+    state: restarted
+  when: ansible_os_family == "Debian"
+...
