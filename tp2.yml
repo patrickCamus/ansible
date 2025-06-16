@@ -26,11 +26,16 @@
       path: /var/www/html/index.html
     register: index_exist
 
+  - name: Debug
+    ansible.builtin.debug:
+      msg: "index.html exists: {{ index_exist.stat.exists }}"
+
   - name: Change the index.html content 
     ansible.builtin.copy:
-      src: /tmp/index.html
+      src: apache/index.html
       dest: /var/www/html/index.html
-    when: index_exist
+    when: index_exist.stat.exists and
+          ansible_distribution == "Debian"
     notify:
       - Restart apache
 ...
