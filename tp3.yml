@@ -1,0 +1,50 @@
+---
+- name: tp3
+  hosts: all
+  gather_facts: True
+  remote_user: root
+  become: True
+  become_user: root
+  become_method: sudo
+
+  tasks:
+  - name: "Install apps on 132 et 133"
+    ansible.builtin.apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - vim
+      - curl
+      - wget
+      - python3-pip
+      - apache2
+      - mysql-server
+    when: inventory_hostname in ['132', '133']
+
+  - name: "Install apps on 134"
+    ansible.builtin.yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - vim
+      - git
+      - curl
+      - cowsay
+      - fortune
+      - wget
+      - python3-pip
+      - nginx
+    when: inventory_hostname == '134'
+
+  - name: "Install ufw if Ubuntu"
+    ansible.builtin.apt:
+      name: ufw
+      state: present
+    when: ansible_facts['os_family'] == 'Ubuntu'
+
+  - name: "Change index.html if apache2/nginx is installed"
+    ansible.builtin.template:
+      src: "{{ 'apache/index.html' if 'apache2' in ansible_facts.packages else if 'nginx' in ansible_facts.packages 'nginx/index.html' }}"
+      dest: "/var/www/html/index.html"
+    when: ansible_facts['os_family'] in ['Ubuntu']
+    
