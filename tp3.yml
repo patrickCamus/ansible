@@ -47,4 +47,10 @@
       src: "{{ 'apache/index.html' if 'apache2' in ansible_facts.packages else if 'nginx' in ansible_facts.packages 'nginx/index.html' }}"
       dest: "/var/www/html/index.html"
     when: ansible_facts['os_family'] in ['Ubuntu']
-    
+
+  - name: "Start and enable apache2/nginx service"
+    ansible.builtin.service:
+      name: "{{ 'apache2' if 'apache2' in ansible_facts.packages else 'nginx' }}"
+      state: started
+      enabled: True
+    when: ansible_facts['os_family'] in ['Ubuntu'] 
