@@ -44,7 +44,7 @@
 
   - name: "Change index.html if apache2/nginx is installed"
     ansible.builtin.template:
-      src: "{{ 'apache/index.html' if 'apache2' in ansible_facts.packages else if 'nginx' in ansible_facts.packages 'nginx/index.html' }}"
+      src: "{{ 'apache/index.j2' if 'apache2' in ansible_facts.packages else if 'nginx' in ansible_facts.packages 'nginx/index.html' }}"
       dest: "/var/www/html/index.html"
     when: ansible_facts['os_family'] in ['Ubuntu']
 
