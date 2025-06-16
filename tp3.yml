@@ -1,0 +1,37 @@
+---
+- name: tp3
+  hosts: all
+  gather_facts: True
+  remote_user: root
+  become: True
+  become_user: root
+  become_method: sudo
+
+  tasks:
+  - name: "install apps on 132 et 133"
+    ansible.builtin.apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - vim
+      - curl
+      - wget
+      - python3-pip
+      - apache2
+      - mysql-server
+    when: inventory_hostname in ['132', '133']
+
+  - name: "install apps on 134"
+    ansible.builtin.yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - vim
+      - git
+      - curl
+      - cowsay
+      - fortune
+      - wget
+      - python3-pip
+      - nginx
+    when: inventory_hostname == '134'
