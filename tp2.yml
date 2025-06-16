@@ -26,6 +26,12 @@
       path: /var/www/html/index.html
     register: index_exist
 
+  - name: Start and enabled apache service
+    ansible.builtin.service:
+      name: apache2
+        state: started
+        enabled: yes
+
   - name: Change the index.html content 
     ansible.builtin.copy:
       src: apache/index.html
