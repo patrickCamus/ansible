@@ -8,7 +8,7 @@
   become_method: sudo
 
   tasks:
-  - name: "install apps on 132 et 133"
+  - name: "Install apps on 132 et 133"
     ansible.builtin.apt:
       name: "{{ item }}"
       state: present
@@ -21,7 +21,7 @@
       - mysql-server
     when: inventory_hostname in ['132', '133']
 
-  - name: "install apps on 134"
+  - name: "Install apps on 134"
     ansible.builtin.yum:
       name: "{{ item }}"
       state: present
@@ -40,4 +40,11 @@
     ansible.builtin.apt:
       name: ufw
       state: present
-    when: ansible_facts['os_family'] == 'Debian'
+    when: ansible_facts['os_family'] == 'Ubuntu'
+
+  - name: "Change index.html if apache2/nginx is installed"
+    ansible.builtin.template:
+      src: "{{ 'apache/index.html' if 'apache2' in ansible_facts.packages else if 'nginx' in ansible_facts.packages 'nginx/index.html' }}"
+      dest: "/var/www/html/index.html"
+    when: ansible_facts['os_family'] in ['Ubuntu']
+    
