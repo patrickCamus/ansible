@@ -1,0 +1,5 @@
+---
+roles:
+  - name: geerlingguy.apache-php-fpm
+    version: latest
+...
