@@ -4,6 +4,7 @@
   remote_user: root
   vars_files:
     - vars/main.yml
+    - secrets.yml
   roles:
     - role: geerlingguy.mysql
       become: true

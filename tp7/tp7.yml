@@ -1,0 +1,51 @@
+---
+- name: Lire et nettoyer un fichier CSV
+  hosts: localhost
+  tasks:
+    - name: Lire le fichier CSV
+      community.general.read_csv:
+        path: temperatures.csv
+      register: data
+
+    - name: Supprimer les doublons et trier
+      ansible.builtin.set_fact:
+        unique_sorted_data: "{{ data.list | unique | sort(attribute='time') }}"
+
+    - name: Afficher le résultat
+      ansible.builtin.debug:
+        msg: "{{ unique_sorted_data }}"
+
+    - name: Sauvegarder le fichier nettoyé
+      ansible.builtin.copy:
+        content: "{{ unique_sorted_data | to_json }}"
+        dest: "./temperatures_cleaned.json"
+        mode: a=wr
+
+    - name: Obtenir les températures
+      ansible.builtin.uri:
+        url: "https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522&current_weather=true"
+        method: GET
+      register: meteo
+
+    - name: Extraire la température actuelle
+      ansible.builtin.set_fact:
+        temperature_actuelle: "{{ meteo.json.current_weather.temperature }}"
+
+    - name: Lire le fichier JSON nettoyé
+      ansible.builtin.slurp:
+        src: "./temperatures_cleaned.json"
+      register: json_data
+
+    - name: Convertir le JSON en liste
+      ansible.builtin.set_fact:
+        temperatures: "{{ json_data.content | b64decode | from_json }}"
+
+    - name: Afficher les températures enregistrées
+      ansible.builtin.debug:
+        msg: "Températures enregistrées : {{ temperatures.list }}"
+
+    - name: Comparer les températures
+      ansible.builtin.debug:
+        msg: "Température actuelle : {{ temperature_actuelle }}°C | Température enregistrée à {{ item.heure }} : {{ item.temperature }}°C"
+      loop: "{{ temperatures.list }}"
+...
