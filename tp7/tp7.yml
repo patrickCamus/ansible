@@ -31,21 +31,13 @@
       ansible.builtin.set_fact:
         temperature_actuelle: "{{ meteo.json.current_weather.temperature }}"
 
-    - name: Lire le fichier JSON nettoyé
-      ansible.builtin.slurp:
-        src: "./temperatures_cleaned.json"
-      register: json_data
-
-    - name: Convertir le JSON en liste
-      ansible.builtin.set_fact:
-        temperatures: "{{ json_data.content | b64decode | from_json }}"
-
-    - name: Afficher les températures enregistrées
-      ansible.builtin.debug:
-        msg: "Températures enregistrées : {{ temperatures.list }}"
+    - name: Lire le fichier JSON
+      ansible.builtin.include_vars:
+        file: ./temperatures_cleaned.json
+      register: donnees_json
 
     - name: Comparer les températures
       ansible.builtin.debug:
         msg: "Température actuelle : {{ temperature_actuelle }}°C | Température enregistrée à {{ item.heure }} : {{ item.temperature }}°C"
-      loop: "{{ temperatures.list }}"
+      loop: "{{ donnees_json.releves }}"
 ...
