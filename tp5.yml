@@ -1,0 +1,27 @@
+---
+- name: Tp5
+  hosts: all
+  remote_user: root
+  become: true
+  become_user: root
+
+  roles:
+    - geerlingguy.docker
+
+  tasks:
+    - name: Import tp3
+      ansible.builtin.include_tasks:
+        file: ../tp3/tp3-correct.yml
+
+    - name: Include vars of tp4.yml
+      ansible.builtin.include_vars:
+        file: ../tp4/tp4.yml
+
+    - name: Write date time in /etc/last_changed
+      ansible.builtin.lineinfile:
+        path: /etc/last_changed
+        line: "{{ ansible_date_time.date }} {{ ansible_date_time.date }}"
+        mode: '0644'
+        create: true
+      tags: datetime
+...
