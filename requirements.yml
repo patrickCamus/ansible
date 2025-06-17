@@ -1,3 +1,5 @@
-  roles:
-    - geerlingguy.docker
-      version: latest
+---
+roles:
+  - name: geerlingguy.docker
+    version: latest
+...
