@@ -1,7 +1,8 @@
 #SPDX-License-Identifier: MIT-0
 galaxy_info:
-  author: your name
-  description: your role description
+  role_name: tp6
+  author: memyselfandI 
+  description: execution du tp6
   company: your company (optional)
 
   # If the issue tracker for your role is not on github, uncomment the
