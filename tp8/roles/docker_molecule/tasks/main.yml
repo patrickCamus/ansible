@@ -33,4 +33,10 @@
     name: docker
     state: started
     enabled: true
+
+- name: Pull de l'image geerlingguy/docker-ubuntu2404-ansible
+  community.docker.docker_image:
+    name: geerlingguy/docker-ubuntu2404-ansible
+    tag: latest
+    source: pull
 ...
