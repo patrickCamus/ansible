@@ -12,6 +12,7 @@
     - geerlingguy.apache
     - geerlingguy.apache-php-fpm
     - tp6
+    - docker_molecule
 ...
 
 
