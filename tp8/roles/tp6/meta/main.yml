@@ -1,6 +1,7 @@
 #SPDX-License-Identifier: MIT-0
 galaxy_info:
   role_name: tp6
+  namespace: test
   author: memyselfandI 
   description: execution du tp6
   company: your company (optional)
