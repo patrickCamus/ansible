@@ -1,6 +1,6 @@
 ---
 - name: Tp8 utilisation des roles
-  hosts: all
+  hosts: web
   user: root
   become: true
   gather_facts: true

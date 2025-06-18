@@ -39,4 +39,9 @@
     name: geerlingguy/docker-ubuntu2404-ansible
     tag: latest
     source: pull
+
+- name: Installation de docker_molecule
+  ansible.builtin.pip:
+    name: molecule[docker]
+    state: latest
 ...
