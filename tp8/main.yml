@@ -1,0 +1,17 @@
+---
+- name: Tp8 utilisation des roles
+  hosts: all
+  user: root
+  become: true
+  gather_facts: true
+  environment:
+    LC_ALL: C
+
+  roles:
+    - geerlingguy.php
+    - geerlingguy.apache
+    - geerlingguy.apache-php-fpm
+    - tp6
+...
+
+

@@ -11,9 +11,29 @@
       ansible.builtin.set_fact:
         unique_sorted_data: "{{ data.list | unique | sort(attribute='time') }}"
 
-    - name: Afficher le résultat
+    - name: Afficher les données uniques et triées
       ansible.builtin.debug:
         msg: "{{ unique_sorted_data }}"
+
+    - name: Obtenir l'heure actuelle
+      ansible.builtin.set_fact:
+        current_time: "{{ ansible_date_time.iso8601 | regex_replace('Z.*', '') | regex_replace('*.T', '') }}"
+
+    - name: Afficher l'heure actuelle
+      ansible.builtin.debug:
+        msg: "Heure actuelle : {{ current_time }}"
+
+    - name: Filtrer les données pour l'heure actuelle
+      ansible.builtin.set_fact:
+        filtered_data: "{{ unique_sorted_data | selectattr('time', 'equalto', current_time) | list }}"
+
+    - name: Afficher les données filtrées
+      ansible.builtin.debug:
+        msg: "Données pour l'heure actuelle : {{ filtered_data }}"
+
+    - name: Obtenir la temperature_actuelle
+      ansible.builtin.set_fact:
+        temperature_actuelle: "{{ unique_sorted_data | selectattr('time', 'equalto', date_formatee) | map(attribute='temperature') | list | first }}"
 
     - name: Sauvegarder le fichier nettoyé
       ansible.builtin.copy:
