@@ -2,20 +2,6 @@
 ---
 # tasks file for tp6
 # ---
-- name: Installer et configurer wordpress
-  hosts: web
-  become: true
-  become_user: root
-
-  vars_files:
-    - vaults/db_secret.yml
-    - vars/main.yml
-
-  roles:
-    - geerlingguy.php
-    - geerlingguy.apache
-    - geerlingguy.apache-php-fpm
-
   tasks:
     - name: Create wordpress directory
       ansible.builtin.file:
